@@ -12,7 +12,7 @@ include 'functions.php';
     </style>
 </head>
 <body>
-    <h1>View Transactions</h1>
+    <h1>View Transactions and Reports</h1>
     <form action="view_transactions.php" method="get">
         <label>View:
             <select name="view_type" id="view_type" onchange="toggleDateInputs()">
@@ -52,12 +52,22 @@ include 'functions.php';
             $transactions = getTransactionsByMonth($conn, $month, $year);
         }
 
+        $total_income = 0;
+        $total_expense = 0;
+
         if (!empty($transactions)) {
             echo "<table border='1'>";
             echo "<tr><th>ID</th><th>Type</th><th>Item Name</th><th>Amount</th><th>Transaction Date</th><th>Created At</th><th>Updated At</th></tr>";
             foreach ($transactions as $transaction) {
                 $transaction = array_change_key_case($transaction, CASE_LOWER);
                 $typeClass = $transaction['type'] == 'income' ? 'income' : 'expense';
+
+                if ($transaction['type'] == 'income') {
+                    $total_income += $transaction['amount'];
+                } else {
+                    $total_expense += $transaction['amount'];
+                }
+
                 echo "<tr class='{$typeClass}'>
                         <td>{$transaction['id']}</td>
                         <td>{$transaction['type']}</td>
@@ -69,6 +79,13 @@ include 'functions.php';
                       </tr>";
             }
             echo "</table>";
+
+            $balance = $total_income - $total_expense;
+
+            echo "<h2>Summary</h2>";
+            echo "<p>Total Income: <span style='color: green;'>{$total_income}</span></p>";
+            echo "<p>Total Expense: <span style='color: red;'>{$total_expense}</span></p>";
+            echo "<p>Balance: {$balance}</p>";
         } else {
             echo "No transactions found.";
         }

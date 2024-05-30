@@ -10,7 +10,6 @@
     <a href="add_transaction.php">Add Transaction</a> |
     <a href="update_transaction.php">Update Transaction</a> |
     <a href="delete_transaction.php">Delete Transaction</a> |
-    <a href="view_transactions.php">View Transactions</a> |
-    <a href="report.php">Report</a>
+    <a href="view_transactions.php">View Transactions</a>
 </body>
 </html>
